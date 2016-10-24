@@ -1,0 +1,19 @@
+sudo: false
+language: python
+services:
+- memcached
+- mysql
+- redis-server
+branches:
+  only:
+  - master
+cache:
+  directories:
+  - $HOME/.cache
+#env:
+#  global:
+#    secure: V8kTaIK8NYMEUVzaekLoVgJzz5/9yA/KKL8CVgOmiPEjt1o1wAXy+ojyXCgjGmB16OOcTYKtXKvOBndDg99MxUzMc9uLrHF4ub2fJZy3ZoCfPaxHNOpIOTTAhB8J/nog/JpW5NnJOBGE8fAQ/TUy8nSvOwe27n4qKO5eWqTy5kA=
+install:
+- pip install --upgrade pip wheel virtualenv
+#script:
+#- ./scripts/travis.sh
