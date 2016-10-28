@@ -1,0 +1,15 @@
+runtime: python27
+api_version: 1
+threadsafe: true
+service: notifications
+
+handlers:
+- url: /
+  script: services.notifications.home.index.app
+
+- url: /mail/.*
+  script: services.notifications.mail.router.app
+  secure: always
+
+- url: /.*
+  script: helpers.generic_errors.router.app

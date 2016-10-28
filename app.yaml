@@ -1,7 +1,11 @@
 runtime: python27
 api_version: 1
 threadsafe: true
+service: default
 
 handlers:
+- url: /
+  script: services.default.home.index.app
+
 - url: /.*
-  script: main.app
+  script: helpers.generic_errors.router.app
