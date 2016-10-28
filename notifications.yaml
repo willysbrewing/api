@@ -11,5 +11,8 @@ handlers:
   script: services.notifications.mail.router.app
   secure: always
 
+- url: /.well-known
+  static_dir: well-known
+
 - url: /.*
   script: helpers.generic_errors.router.app
