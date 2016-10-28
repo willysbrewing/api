@@ -1,1 +1,1 @@
-# Willy's Brewing API
+# Willy's Brewing API - Core

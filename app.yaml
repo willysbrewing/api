@@ -5,10 +5,10 @@ service: default
 
 handlers:
 - url: /
-  script: services.default.home.index.app
+  script: src.home.main.app
 
 - url: /.well-known
   static_dir: well-known
 
 - url: /.*
-  script: helpers.generic_errors.router.app
+  script: src.helpers.generic_errors.main.app
