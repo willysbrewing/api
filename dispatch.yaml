@@ -1,0 +1,3 @@
+dispatch:
+  - url: "*notifications.api.willysbrewing.com/*"
+    module: notifications
