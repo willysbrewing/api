@@ -12,3 +12,6 @@ handlers:
 
 - url: /.*
   script: src.helpers.generic_errors.main.app
+
+automatic_scaling:
+  max_idle_instances: 10
