@@ -4,14 +4,12 @@ threadsafe: true
 service: default
 
 handlers:
-- url: /
-  script: src.home.main.app
-
 - url: /.well-known
   static_dir: well-known
 
 - url: /.*
-  script: src.helpers.generic_errors.main.app
+  script: api.app
+  secure: always
 
 automatic_scaling:
   max_idle_instances: 10
