@@ -1,4 +1,4 @@
-
+"""User Schema"""
 
 from marshmallow import Schema, fields, ValidationError, post_dump
 

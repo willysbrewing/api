@@ -1,6 +1,6 @@
-"""api VALIDATORS"""
+"""Validators"""
 
-import logging
+
 from functools import wraps
 
 from flask import request
@@ -28,6 +28,19 @@ def requires_auth(func):
     return wrapper
 
 
+def requires_admin(func):
+    """Admin validation"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        # auth = request.authorization
+        auth = True
+        if not auth:
+            return error(status=401, detail='Unauthorized')
+        # kwargs['user'] = User.get(User.email == auth.username) @TODO
+        return func(*args, **kwargs)
+    return wrapper
+
+
 def validate_user_creation(func):
     """User Creation Validation"""
     @wraps(func)
@@ -39,5 +52,18 @@ def validate_user_creation(func):
         if errors:
             return error(status=422, detail=_errors_to_string(errors))
         kwargs['user'] = user
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def validate_user_update(func):
+    """User Update Validation"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        json_data = request.get_json()
+        if not json_data:
+            return error(status=400, detail='Bad request')
+        # check for optional fields @TODO
+        kwargs['user'] = {}  # @TODO
         return func(*args, **kwargs)
     return wrapper

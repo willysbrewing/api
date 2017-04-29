@@ -1,4 +1,4 @@
-"""API errors"""
+"""ERRORS"""
 
 
 class Error(Exception):

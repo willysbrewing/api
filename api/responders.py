@@ -1,19 +1,24 @@
-"""API errors"""
+"""Responders"""
 
 
 class Responder(object):
 
     def __init__(self, type, data):
         self.type = type
-        self.data = data
+        if isinstance(data, list):
+            self.data = data
+        else:
+            self.data = [data]
 
     @property
     def serialize(self):
-        return {
-            'id': self.data.pop('id', None),
-            'type': self.type,
-            'attributes': self.data
-        }
+        def serialize_element(element):
+            return {
+                'id': element.pop('id', None),
+                'type': self.type,
+                'attributes': element
+            }
+        return [serialize_element(element) for element in self.data]
 
 
 class UserResponder(Responder):
