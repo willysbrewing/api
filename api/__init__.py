@@ -1,28 +1,56 @@
+"""API MODULE"""
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
+import os
 import json
+import logging
 
 from flask import Flask
-# from api.<submodule>.routes.api.v1 import endpoints
-from api.helpers import error
+from flask_cors import CORS
+from api.config import SETTINGS
+from api.routes.api import error
+from api.routes.api.v1 import endpoints_v1
+# from api.routes.api.v2 import endpoints_v2
 
-# Flask
+
+logging.basicConfig(
+    level=SETTINGS.get('logging', {}).get('level'),
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%Y%m%d-%H:%M%p',
+)
+
+# Flask App
 app = Flask(__name__)
+CORS(app)
 
-# Endpoints
-# app.register_blueprint(endpoints)
+# Blueprint Flask Routing
+app.register_blueprint(endpoints_v1, url_prefix='/api/v1')
+# app.register_blueprint(endpoints_v2, url_prefix='/api/v2')
 
-# Errors
-@app.errorhandler(500)
-def server_error(e):
-    return error(status=500, error_message='An internal error occurred')
 
-@app.errorhandler(400)
-def bad_request(e):
-    return error(status=400, error_message='Bad request')
+@app.errorhandler(403)
+def forbidden(e):
+    return error(status=403, detail='Forbidden')
+
 
 @app.errorhandler(404)
-def not_found(e):
-    return error(status=404, error_message='Not found')
+def page_not_found(e):
+    return error(status=404, detail='Not Found')
+
 
 @app.errorhandler(405)
-def not_allowed(e):
-    return error(status=405, error_message='Method not allowed')
+def method_not_allowed(e):
+    return error(status=405, detail='Method Not Allowed')
+
+
+@app.errorhandler(410)
+def gone(e):
+    return error(status=410, detail='Gone')
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return error(status=500, detail='Internal Server Error')
