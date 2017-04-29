@@ -1,2 +1,2 @@
 
-from api.routes.api.v1.api_router import endpoints_v1
+from api.routes.api.v1.user_router import user_endpoints_v1

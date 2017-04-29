@@ -8,13 +8,13 @@ import os
 import json
 import logging
 
-from flask import Flask
+from flask import Flask, g
 from flask_cors import CORS
 from api.config import SETTINGS
 from api.routes.api import error
-from api.routes.api.v1 import endpoints_v1
-# from api.routes.api.v2 import endpoints_v2
-
+from api.routes.api.v1 import user_endpoints_v1
+# from api.routes.api.v2 import user_endpoints...
+from google.cloud import datastore
 
 logging.basicConfig(
     level=SETTINGS.get('logging', {}).get('level'),
@@ -24,11 +24,24 @@ logging.basicConfig(
 
 # Flask App
 app = Flask(__name__)
+
+# Cors settings
 CORS(app)
 
+# Database
+project_id = SETTINGS.get('environment').get('project_id')
+db = datastore.Client(project_id)
+
 # Blueprint Flask Routing
-app.register_blueprint(endpoints_v1, url_prefix='/api/v1')
+app.register_blueprint(user_endpoints_v1, url_prefix='/api/v1/user')
 # app.register_blueprint(endpoints_v2, url_prefix='/api/v2')
+
+
+# Ensure a separate connection for each thread
+# @app.before_request
+# def before_request():
+#     # db = datastore.Client(project_id)
+#     g.db = db
 
 
 @app.errorhandler(403)

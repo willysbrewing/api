@@ -7,8 +7,9 @@ from flask import jsonify
 
 # GENERIC Error
 
-def error(status=400, detail='Bad Request'):
-    return jsonify({
+def error(status=500, detail='Generic Error'):
+    error = {
         'status': status,
         'detail': detail
-    }), status
+    }
+    return jsonify(errors=[error]), status
