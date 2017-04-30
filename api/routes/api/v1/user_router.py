@@ -76,12 +76,12 @@ def get_user(user_id):
 @requires_auth
 @requires_admin
 @validate_user_update
-def update_user(user_id, user):
+def update_user(user_id, new_user):
     """-"""
     logging.info('[ROUTER]: Updating user')
     try:
         # Update
-        user = UserService.update_user(user_id, user)
+        user = UserService.update_user(user_id, new_user)
     except UserNotFound as e:
         logging.error('[ROUTER]: '+e.message)
         return error(status=404, detail=e.message)

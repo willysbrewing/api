@@ -13,3 +13,6 @@ handlers:
 
 automatic_scaling:
   max_idle_instances: 10
+
+env_variables:
+  GCLOUD_PROJECT: 'willys-4fbc0'

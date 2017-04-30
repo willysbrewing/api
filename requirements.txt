@@ -1,4 +1,5 @@
-Flask==0.12.0
+Flask==0.12.1
 Flask-cors==3.0.2
-requests==2.12.4
+firebase-admin==1.0.0
+requests==2.13.0
 marshmallow==2.13.5

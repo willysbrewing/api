@@ -1,7 +1,5 @@
 """User model"""
 
-import datetime as dt
-
 from google.appengine.ext import ndb
 
 
@@ -16,7 +14,11 @@ class User(ndb.Model):
         choices=('male', 'female', 'other')
     )
     address = ndb.StringProperty()
-    created_at = ndb.DateTimeProperty(default=dt.datetime.utcnow())
+    created_at = ndb.DateTimeProperty(auto_now_add=True)
+    role = ndb.StringProperty(
+        choices=('ADMIN', 'USER'),
+        default='USER'
+    )
 
     def __repr__(self):
         return '<User %r>' % self.email
