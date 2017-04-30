@@ -5,6 +5,6 @@ SETTINGS = {
         'level': 'DEBUG'
     },
     'environment': {
-        'project_id': 'todo'
+        'project_id': 'willys-4fbc0'
     }
 }

@@ -1,6 +1,5 @@
 """Responders"""
 
-
 class Responder(object):
 
     def __init__(self, type, data):
@@ -12,6 +11,9 @@ class Responder(object):
 
     @property
     def serialize(self):
+        # Empty data
+        if len(self.data) == 1 and not self.data[0]:
+            self.data.pop()
         def serialize_element(element):
             return {
                 'id': element.pop('id', None),

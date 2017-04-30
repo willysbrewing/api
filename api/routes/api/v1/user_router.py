@@ -44,7 +44,7 @@ def create_user(user):
 @requires_admin
 def get_users():
     """-"""
-    logging.info('[ROUTER]: Getting user')
+    logging.info('[ROUTER]: Getting users')
     # Getting
     users = UserService.get_users()
     # Serialize
@@ -57,13 +57,13 @@ def get_users():
 @requires_admin
 def get_user(user_id):
     """-"""
-    logging.info('[ROUTER]: Updating user')
+    logging.info('[ROUTER]: Getting user')
     try:
         # Getting
         user = UserService.get_user(user_id)
     except UserNotFound as e:
         logging.error('[ROUTER]: '+e.message)
-        return error(status=400, detail=e.message)
+        return error(status=404, detail=e.message)
     except Exception as e:
         logging.error('[ROUTER]: '+str(e))
         return error(status=500, detail='Generic Error')
@@ -84,7 +84,7 @@ def update_user(user_id, user):
         user = UserService.update_user(user_id, user)
     except UserNotFound as e:
         logging.error('[ROUTER]: '+e.message)
-        return error(status=400, detail=e.message)
+        return error(status=404, detail=e.message)
     except Exception as e:
         logging.error('[ROUTER]: '+str(e))
         return error(status=500, detail='Generic Error')
@@ -104,7 +104,7 @@ def delete_user(user_id):
         user = UserService.delete_user(user_id)
     except UserNotFound as e:
         logging.error('[ROUTER]: '+e.message)
-        return error(status=400, detail=e.message)
+        return error(status=404, detail=e.message)
     except Exception as e:
         logging.error('[ROUTER]: '+str(e))
         return error(status=500, detail='Generic Error')
