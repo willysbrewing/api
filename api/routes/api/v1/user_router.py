@@ -112,3 +112,28 @@ def delete_user(user_id):
     user = UserSchema().dump(user).data
     response = UserResponder(user).serialize
     return jsonify(data=response), 200
+
+@user_endpoints_v1.route('/me', strict_slashes=False, methods=['GET'])
+@requires_auth
+def get_me(auth_user):
+    """-"""
+    logging.info('[ROUTER]: Getting me')
+    try:
+        # Getting
+        user = UserService.get_user_by_email(auth_user.get('email'))
+    except UserNotFound as e:
+        logging.error('[ROUTER]: Creating for the first time')
+        user, errors = UserSchema().load(
+            {
+                'first_name': auth_user.get('name').split(' ')[0],
+                'last_name': auth_user.get('name').split(' ')[1],
+                'email': auth_user.get('email')
+            }
+        )
+    except Exception as e:
+        logging.error('[ROUTER]: '+str(e))
+        return error(status=500, detail='Generic Error')
+    # Serialize
+    user = UserSchema().dump(user).data
+    response = UserResponder(user).serialize
+    return jsonify(data=response), 200
