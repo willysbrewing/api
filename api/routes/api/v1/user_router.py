@@ -130,6 +130,7 @@ def get_me(auth_user):
                 'email': auth_user.get('email')
             }
         )
+        user = UserService.create_user(user)
     except Exception as e:
         logging.error('[ROUTER]: '+str(e))
         return error(status=500, detail='Generic Error')

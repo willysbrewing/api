@@ -1,5 +1,7 @@
 """User model"""
 
+from api.models.stock import Stock
+
 from google.appengine.ext import ndb
 
 
@@ -14,6 +16,8 @@ class User(ndb.Model):
         choices=('male', 'female', 'other')
     )
     address = ndb.StringProperty()
+    mobile_number = ndb.StringProperty()
+    stocks = ndb.StructuredProperty(Stock, repeated=True)
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     role = ndb.StringProperty(
         choices=('ADMIN', 'USER'),

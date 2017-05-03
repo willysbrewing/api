@@ -2,7 +2,7 @@
 
 import logging
 from google.appengine.ext import ndb
-from api.models import User
+from api.models.user import User
 from api.errors import UserNotFound, UserDuplicated
 
 

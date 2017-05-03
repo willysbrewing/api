@@ -1,7 +1,7 @@
 """User Schema"""
 
 from marshmallow import Schema, fields, ValidationError, post_load
-from api.models import User
+from api.models.user import User
 
 def _validate_gender(gender):
     if gender != 'man' and gender != 'woman' and gender != 'other':
