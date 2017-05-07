@@ -14,7 +14,7 @@ def create_user(user):
     try:
         user.put()
     except Exception as e:
-        raise e
+        raise e 
     return user
 
 def get_users(query_filter=None):

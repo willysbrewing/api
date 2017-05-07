@@ -26,3 +26,7 @@ class Responder(object):
 class UserResponder(Responder):
     def __init__(self, data):
         super(UserResponder, self).__init__(type='user', data=data)
+
+class StockInfoResponder(Responder):
+    def __init__(self, data):
+        super(StockInfoResponder, self).__init__(type='stock_info', data=data)

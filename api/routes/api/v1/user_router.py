@@ -9,7 +9,7 @@ import logging
 from flask import Blueprint, jsonify
 from api.routes.api import error
 from api.validators import validate_user_creation, validate_user_update, \
-    requires_auth, requires_admin
+    requires_auth, requires_admin, validate_me_creation
 from api.services import user_service as UserService
 from api.errors import UserNotFound, UserDuplicated
 from api.schemas import UserSchema
@@ -131,6 +131,25 @@ def get_me(auth_user):
             }
         )
         user = UserService.create_user(user)
+    except Exception as e:
+        logging.error('[ROUTER]: '+str(e))
+        return error(status=500, detail='Generic Error')
+    # Serialize
+    user = UserSchema().dump(user).data
+    response = UserResponder(user).serialize
+    return jsonify(data=response), 200
+
+@user_endpoints_v1.route('/me', strict_slashes=False, methods=['POST'])
+@validate_me_creation
+def create_me(user):
+    """-"""
+    logging.info('[ROUTER]: Creating me')
+    try:
+        # Creating
+        user = UserService.create_user(user)
+    except UserDuplicated as e:
+        logging.error('[ROUTER]: '+e.message)
+        return error(status=400, detail=e.message)
     except Exception as e:
         logging.error('[ROUTER]: '+str(e))
         return error(status=500, detail='Generic Error')

@@ -62,7 +62,24 @@ def validate_user_creation(func):
             return error(status=400, detail='Bad request')
         user, errors = UserSchema().load(json_data)
         if errors:
-            return error(status=422, detail=_errors_to_string(errors))
+            return error(status=400, detail=_errors_to_string(errors))
+        kwargs['user'] = user
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def validate_me_creation(func):
+    """Me Creation Validation"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        json_data = request.get_json()
+        if not json_data:
+            return error(status=400, detail='Bad request')
+        if 'role' in json_data:
+            del json_data['role']
+        user, errors = UserSchema().load(json_data)
+        if errors:
+            return error(status=400, detail=_errors_to_string(errors))
         kwargs['user'] = user
         return func(*args, **kwargs)
     return wrapper
@@ -76,9 +93,9 @@ def validate_user_update(func):
         if not json_data:
             return error(status=400, detail='Bad request')
         if not 'role' in json_data:
-            return error(status=422, detail='Role missing')
+            return error(status=400, detail='Role missing')
         if json_data.get('role') not in ('USER', 'ADMIN'):
-            return error(status=422, detail='Role not valid')
+            return error(status=400, detail='Role not valid')
         kwargs['new_user'] = json_data
         return func(*args, **kwargs)
     return wrapper

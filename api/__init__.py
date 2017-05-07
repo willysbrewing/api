@@ -13,7 +13,7 @@ from flask import Flask, g
 from flask_cors import CORS
 from api.config import SETTINGS
 from api.routes.api import error
-from api.routes.api.v1 import user_endpoints_v1
+from api.routes.api.v1 import user_endpoints_v1, stock_endpoints_v1
 # from api.routes.api.v2 import user_endpoints...
 import firebase_admin
 
@@ -34,8 +34,9 @@ CORS(app)
 default_app = firebase_admin.initialize_app()
 
 # Blueprint Flask Routing
-app.register_blueprint(user_endpoints_v1, url_prefix='/api/v1/user')
-# app.register_blueprint(endpoints_v2, url_prefix='/api/v2')
+app.register_blueprint(user_endpoints_v1, url_prefix='/v1/user')
+app.register_blueprint(stock_endpoints_v1, url_prefix='/v1/stock')
+# app.register_blueprint(endpoints_v2, url_prefix='/v2')
 
 
 @app.errorhandler(403)
