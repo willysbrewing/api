@@ -99,3 +99,18 @@ def validate_user_update(func):
         kwargs['new_user'] = json_data
         return func(*args, **kwargs)
     return wrapper
+
+
+def validate_new_stocks(func):
+    """New Stocks Validation"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        json_data = request.get_json()
+        if not json_data or 'n_stocks' not in json_data:
+            return error(status=400, detail='Bad request')
+        n_stocks = json_data['n_stocks']
+        if not type(n_stocks) is int:
+            return error(status=400, detail='Bad request')
+        kwargs['n_stocks'] = n_stocks
+        return func(*args, **kwargs)
+    return wrapper

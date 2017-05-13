@@ -9,9 +9,9 @@ import logging
 from flask import Blueprint, jsonify
 from api.routes.api import error
 from api.validators import validate_user_creation, validate_user_update, \
-    requires_auth, requires_admin, validate_me_creation
+    requires_auth, requires_admin, validate_me_creation, validate_new_stocks
 from api.services import user_service as UserService
-from api.errors import UserNotFound, UserDuplicated
+from api.errors import UserNotFound, UserDuplicated, GenericStockError
 from api.schemas import UserSchema
 from api.responders import UserResponder
 
@@ -150,6 +150,30 @@ def create_me(user):
     except UserDuplicated as e:
         logging.error('[ROUTER]: '+e.message)
         return error(status=400, detail=e.message)
+    except Exception as e:
+        logging.error('[ROUTER]: '+str(e))
+        return error(status=500, detail='Generic Error')
+    # Serialize
+    user = UserSchema().dump(user).data
+    response = UserResponder(user).serialize
+    return jsonify(data=response), 200
+
+@user_endpoints_v1.route('/<user_id>/stock/add', strict_slashes=False, methods=['POST'])
+@requires_auth
+@requires_admin
+@validate_new_stocks
+def add_stocks_to_user(user_id, n_stocks):
+    """-"""
+    logging.info('[ROUTER]: Adding stocks to user')
+    try:
+        # Adding stocks
+        user = UserService.add_stocks_to_user(user_id, n_stocks)
+    except GenericStockError as e:
+        logging.error('[ROUTER]: '+e.message)
+        return error(status=400, detail=e.message)
+    except UserNotFound as e:
+        logging.error('[ROUTER]: '+e.message)
+        return error(status=404, detail=e.message)
     except Exception as e:
         logging.error('[ROUTER]: '+str(e))
         return error(status=500, detail='Generic Error')

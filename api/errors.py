@@ -13,3 +13,7 @@ class UserNotFound(Error):
 
 class UserDuplicated(Error):
     pass
+
+
+class GenericStockError(Error):
+    pass

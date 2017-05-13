@@ -2,6 +2,7 @@
 
 from marshmallow import Schema, fields, ValidationError, post_load
 from api.models.user import User
+from api.schemas.stock import StockSchema
 
 def _validate_gender(gender):
     if gender != 'man' and gender != 'woman' and gender != 'other':
@@ -20,6 +21,7 @@ class UserSchema(Schema):
     last_name = fields.Str(required=True)
     gender = fields.Str(validate=_validate_gender)
     address = fields.Str()
+    stocks = fields.Nested(StockSchema, many=True)
     created_at = fields.DateTime(dump_only=True)
     role = fields.Str(validate=_validate_role)
 

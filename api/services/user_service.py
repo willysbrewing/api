@@ -2,8 +2,9 @@
 
 import logging
 from google.appengine.ext import ndb
-from api.models.user import User
-from api.errors import UserNotFound, UserDuplicated
+from api.models.user import User, Stock
+from api.errors import UserNotFound, UserDuplicated, GenericStockError
+from api.services import stock_service as StockService
 
 
 def create_user(user):
@@ -14,15 +15,16 @@ def create_user(user):
     try:
         user.put()
     except Exception as e:
-        raise e 
+        raise e
     return user
 
 def get_users(query_filter=None):
     logging.info('[SERVICE]: Getting users')
     if not query_filter:
         users = User.query()
+        logging.info(users)
     else:
-        users = User.query().filter(query_filter).get()
+        users = User.query().filter(query_filter)
     return users
 
 def get_user(user_id):
@@ -58,6 +60,32 @@ def delete_user(user_id):
         raise UserNotFound(message='User '+ user_id +' does not exist')
     try:
         user.key.delete()
+    except Exception as e:
+        raise e
+    return user
+
+def add_stocks_to_user(user_id, n_stocks):
+    logging.info('[SERVICE]: Adding stocks to a user')
+    user = User.get_by_id(int(user_id), use_cache=False, use_memcache=False)
+    if not user:
+        raise UserNotFound(message='User '+ user_id +' does not exist')
+    if n_stocks <= 0 or n_stocks > 4:
+        raise GenericStockError(message='Invalid Stock number')
+    if len(user.stocks) + n_stocks > 4:
+        raise GenericStockError(message='Max number of stocks reached')
+    try:
+        stocks_ids = StockService.get_stock_ids(n_stocks)
+    except Exception as e:
+        raise GenericStockError(message='Error in StockInfo')
+    try:
+        stocks = []
+        for stockid in stocks_ids:
+            stock = Stock(
+                stockid=stockid
+            )
+            stocks.append(stock)
+        user.stocks = stocks
+        user.put()
     except Exception as e:
         raise e
     return user
