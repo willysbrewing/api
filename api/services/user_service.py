@@ -96,3 +96,13 @@ def add_news_like(user_id, news_id):
             user.put()
     except Exception as e:
         raise e
+
+def add_event_going(user_id, event_id):
+    logging.info('[SERVICE]: Adding going to event')
+    user = User.get_by_id(int(user_id), use_cache=False, use_memcache=False)
+    try:
+        if event_id not in user.events_going:
+            user.events_going.append(event_id)
+            user.put()
+    except Exception as e:
+        raise e

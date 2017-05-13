@@ -24,12 +24,14 @@ def get_news(query_filter=None):
 
 @ndb.transactional
 def add_like(key, user_id):
+    logging.info('[DB]: Transactional')
     news = key.get()
     if user_id not in news.likes:
         news.likes.append(user_id)
         news.put()
 
 def like_news(news_id, auth_user):
+    logging.info('[SERVICE]: Like this news')
     try:
         news_id = int(news_id)
         user = UserService.get_user_by_email(auth_user['email'])
