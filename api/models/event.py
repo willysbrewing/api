@@ -11,6 +11,7 @@ class Event(ndb.Model):
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     going = ndb.IntegerProperty(repeated=True)
     link_url = ndb.StringProperty(required=True)
+    image_url = ndb.StringProperty(required=True)
 
     def __repr__(self):
         return '<Event %r>' % self.title

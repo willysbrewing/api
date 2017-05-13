@@ -10,6 +10,7 @@ class EventSchema(Schema):
     description = fields.Str(required=True)
     going = fields.List(fields.Integer)
     link_url = fields.Str(required=True)
+    image_url = fields.Str(required=True)
     created_at = fields.DateTime(dump_only=True)
 
 
