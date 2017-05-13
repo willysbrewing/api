@@ -30,3 +30,11 @@ class UserResponder(Responder):
 class StockInfoResponder(Responder):
     def __init__(self, data):
         super(StockInfoResponder, self).__init__(type='stock_info', data=data)
+
+class NewsResponder(Responder):
+    def __init__(self, data):
+        super(NewsResponder, self).__init__(type='news', data=data)
+
+class EventResponder(Responder):
+    def __init__(self, data):
+        super(EventResponder, self).__init__(type='event', data=data)

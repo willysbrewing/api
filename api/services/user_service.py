@@ -22,7 +22,6 @@ def get_users(query_filter=None):
     logging.info('[SERVICE]: Getting users')
     if not query_filter:
         users = User.query()
-        logging.info(users)
     else:
         users = User.query().filter(query_filter)
     return users
@@ -78,14 +77,22 @@ def add_stocks_to_user(user_id, n_stocks):
     except Exception as e:
         raise GenericStockError(message='Error in StockInfo')
     try:
-        stocks = []
         for stockid in stocks_ids:
             stock = Stock(
                 stockid=stockid
             )
-            stocks.append(stock)
-        user.stocks = stocks
+            user.stocks.append(stock)
         user.put()
     except Exception as e:
         raise e
     return user
+
+def add_news_like(user_id, news_id):
+    logging.info('[SERVICE]: Adding news like')
+    user = User.get_by_id(int(user_id), use_cache=False, use_memcache=False)
+    try:
+        if news_id not in user.news_likes:
+            user.news_likes.append(news_id)
+            user.put()
+    except Exception as e:
+        raise e

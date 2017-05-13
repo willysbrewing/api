@@ -23,6 +23,10 @@ class User(ndb.Model):
         choices=('ADMIN', 'USER'),
         default='USER'
     )
+    news_likes = ndb.IntegerProperty(repeated=True)
+    events_going = ndb.IntegerProperty(repeated=True)
+    contests_applied = ndb.IntegerProperty(repeated=True)
+
 
     def __repr__(self):
         return '<User %r>' % self.email

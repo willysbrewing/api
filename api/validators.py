@@ -3,7 +3,7 @@
 from functools import wraps
 
 from flask import request
-from api.schemas import UserSchema
+from api.schemas import UserSchema, NewsSchema, EventSchema
 from api.routes.api import error
 from api.services import user_service as UserService
 from api.errors import UserNotFound
@@ -112,5 +112,35 @@ def validate_new_stocks(func):
         if not type(n_stocks) is int:
             return error(status=400, detail='Bad request')
         kwargs['n_stocks'] = n_stocks
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def validate_news_creation(func):
+    """News Creation Validation"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        json_data = request.get_json()
+        if not json_data:
+            return error(status=400, detail='Bad request')
+        news, errors = NewsSchema().load(json_data)
+        if errors:
+            return error(status=400, detail=_errors_to_string(errors))
+        kwargs['news'] = news
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def validate_event_creation(func):
+    """Event Creation Validation"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        json_data = request.get_json()
+        if not json_data:
+            return error(status=400, detail='Bad request')
+        event, errors = EventSchema().load(json_data)
+        if errors:
+            return error(status=400, detail=_errors_to_string(errors))
+        kwargs['event'] = event
         return func(*args, **kwargs)
     return wrapper

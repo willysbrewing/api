@@ -22,6 +22,9 @@ class UserSchema(Schema):
     gender = fields.Str(validate=_validate_gender)
     address = fields.Str()
     stocks = fields.Nested(StockSchema, many=True)
+    news_likes = fields.List(fields.Integer)
+    events_going = fields.List(fields.Integer)
+    contests_applied = fields.List(fields.Integer)
     created_at = fields.DateTime(dump_only=True)
     role = fields.Str(validate=_validate_role)
 
