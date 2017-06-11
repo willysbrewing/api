@@ -17,6 +17,7 @@ from api.routes.api.v1 import user_endpoints_v1, stock_endpoints_v1, \
     news_endpoints_v1, event_endpoints_v1
 # from api.routes.api.v2 import user_endpoints...
 import firebase_admin
+from google.appengine.ext import ndb
 
 # Logging config
 logging.basicConfig(
@@ -30,6 +31,12 @@ app = Flask(__name__)
 
 # Cors settings
 CORS(app)
+
+# DB Cache Settings
+context = ndb.get_context()
+context.set_cache_policy(lambda key: key.kind() != 'User')
+context.set_memcache_policy(lambda key: key.kind() != 'User')
+context.set_memcache_timeout_policy(3600)
 
 # JWT using Firebase Auth
 default_app = firebase_admin.initialize_app()
