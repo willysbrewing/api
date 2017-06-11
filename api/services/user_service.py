@@ -81,6 +81,7 @@ def add_stocks_to_user(user_id, n_stocks):
             stock = Stock(
                 stockid=stockid
             )
+            stock.put()
             user.stocks.append(stock)
         user.put()
     except Exception as e:
