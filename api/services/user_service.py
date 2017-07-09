@@ -46,7 +46,20 @@ def update_user(user_id, new_user):
     if not user:
         raise UserNotFound(message='User '+ user_id +' does not exist')
     try:
-        user.role = new_user.get('role')
+        user.role = new_user.get('role') or user.role
+        user.address = new_user.get('address') or user.address
+        user.put()
+    except Exception as e:
+        raise e
+    return user
+
+def update_me(auth_user, new_user):
+    logging.info('[SERVICE]: Updating me '+ auth_user['email'])
+    user = User.query().filter(User.email == auth_user['email']).get()
+    if not user:
+        raise UserNotFound(message='User '+ auth_user['email'] +' does not exist')
+    try:
+        user.address = new_user.get('address') or user.address
         user.put()
     except Exception as e:
         raise e

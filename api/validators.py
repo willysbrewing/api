@@ -101,6 +101,18 @@ def validate_user_update(func):
     return wrapper
 
 
+def validate_me_update(func):
+    """User Me Validation"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        json_data = request.get_json()
+        if not json_data:
+            return error(status=400, detail='Bad request')
+        kwargs['new_user'] = json_data
+        return func(*args, **kwargs)
+    return wrapper
+
+
 def validate_new_stocks(func):
     """New Stocks Validation"""
     @wraps(func)

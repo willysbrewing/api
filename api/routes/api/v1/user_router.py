@@ -9,7 +9,7 @@ import logging
 from flask import Blueprint, jsonify
 from api.routes.api import error
 from api.validators import validate_user_creation, validate_user_update, \
-    requires_auth, requires_admin, validate_me_creation, validate_new_stocks
+    requires_auth, requires_admin, validate_me_creation, validate_new_stocks, validate_me_update
 from api.services import user_service as UserService
 from api.errors import UserNotFound, UserDuplicated, GenericStockError
 from api.schemas import UserSchema
@@ -150,6 +150,26 @@ def create_me(user):
     except UserDuplicated as e:
         logging.error('[ROUTER]: '+e.message)
         return error(status=400, detail=e.message)
+    except Exception as e:
+        logging.error('[ROUTER]: '+str(e))
+        return error(status=500, detail='Generic Error')
+    # Serialize
+    user = UserSchema().dump(user).data
+    response = UserResponder(user).serialize
+    return jsonify(data=response), 200
+
+@user_endpoints_v1.route('/me', strict_slashes=False, methods=['PATCH'])
+@requires_auth
+@validate_me_update
+def update_me(auth_user, new_user):
+    """-"""
+    logging.info('[ROUTER]: Updating me')
+    try:
+        # Getting
+        user = UserService.update_me(auth_user, new_user)
+    except UserNotFound as e:
+        logging.error('[ROUTER]: '+e.message)
+        return error(status=404, detail=e.message)
     except Exception as e:
         logging.error('[ROUTER]: '+str(e))
         return error(status=500, detail='Generic Error')
