@@ -21,6 +21,8 @@ class UserSchema(Schema):
     last_name = fields.Str(required=True)
     gender = fields.Str(validate=_validate_gender)
     address = fields.Str()
+    mobile_number = fields.Str()
+    birthdate = fields.Date()
     stocks = fields.Nested(StockSchema, many=True)
     news_likes = fields.List(fields.Integer)
     events_going = fields.List(fields.Integer)

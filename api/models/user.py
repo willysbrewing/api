@@ -17,6 +17,7 @@ class User(ndb.Model):
     )
     address = ndb.StringProperty()
     mobile_number = ndb.StringProperty()
+    birthdate = ndb.DateProperty()
     stocks = ndb.StructuredProperty(Stock, repeated=True)
     created_at = ndb.DateTimeProperty(auto_now_add=True)
     role = ndb.StringProperty(

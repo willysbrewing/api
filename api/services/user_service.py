@@ -1,6 +1,7 @@
 """User Service"""
 
 import logging
+import datetime
 from google.appengine.ext import ndb
 from api.models.user import User, Stock
 from api.errors import UserNotFound, UserDuplicated, GenericStockError
@@ -48,6 +49,8 @@ def update_user(user_id, new_user):
     try:
         user.role = new_user.get('role') or user.role
         user.address = new_user.get('address') or user.address
+        user.mobile_number = new_user.get('mobile_number') or user.mobile_number
+        user.birthdate = datetime.datetime.strptime(new_user.get('birthdate').split('T')[0], "%Y-%m-%d").date() or user.birthdate
         user.put()
     except Exception as e:
         raise e
@@ -60,6 +63,8 @@ def update_me(auth_user, new_user):
         raise UserNotFound(message='User '+ auth_user['email'] +' does not exist')
     try:
         user.address = new_user.get('address') or user.address
+        user.mobile_number = new_user.get('mobile_number') or user.mobile_number
+        user.birthdate = datetime.datetime.strptime(new_user.get('birthdate').split('T')[0], "%Y-%m-%d").date() or user.birthdate
         user.put()
     except Exception as e:
         raise e
