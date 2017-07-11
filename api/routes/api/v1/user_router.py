@@ -147,9 +147,9 @@ def create_me(user):
     try:
         # Creating
         user = UserService.create_user(user)
-    except UserDuplicated as e:
-        logging.error('[ROUTER]: '+e.message)
-        return error(status=400, detail=e.message)
+    # except UserDuplicated as e:
+    #     logging.error('[ROUTER]: '+e.message)
+    #     return error(status=400, detail=e.message)
     except Exception as e:
         logging.error('[ROUTER]: '+str(e))
         return error(status=500, detail='Generic Error')

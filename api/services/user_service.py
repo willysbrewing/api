@@ -12,7 +12,8 @@ def create_user(user):
     logging.info('[SERVICE]: Creating a new user')
     current_user = User.query().filter(User.email == user.email).get()
     if current_user:
-        raise UserDuplicated(message='User with email '+ user.email+ ' already exists')
+        return user
+        # raise UserDuplicated(message='User with email '+ user.email+ ' already exists')
     try:
         user.put()
     except Exception as e:
@@ -50,7 +51,8 @@ def update_user(user_id, new_user):
         user.role = new_user.get('role') or user.role
         user.address = new_user.get('address') or user.address
         user.mobile_number = new_user.get('mobile_number') or user.mobile_number
-        user.birthdate = datetime.datetime.strptime(new_user.get('birthdate').split('T')[0], "%Y-%m-%d").date() or user.birthdate
+        if new_user.get('birthdate'):
+            user.birthdate = datetime.datetime.strptime(new_user.get('birthdate').split('T')[0], "%Y-%m-%d").date() or user.birthdate
         user.put()
     except Exception as e:
         raise e
@@ -64,7 +66,8 @@ def update_me(auth_user, new_user):
     try:
         user.address = new_user.get('address') or user.address
         user.mobile_number = new_user.get('mobile_number') or user.mobile_number
-        user.birthdate = datetime.datetime.strptime(new_user.get('birthdate').split('T')[0], "%Y-%m-%d").date() or user.birthdate
+        if new_user.get('birthdate'):
+            user.birthdate = datetime.datetime.strptime(new_user.get('birthdate').split('T')[0], "%Y-%m-%d").date() or user.birthdate
         user.put()
     except Exception as e:
         raise e
